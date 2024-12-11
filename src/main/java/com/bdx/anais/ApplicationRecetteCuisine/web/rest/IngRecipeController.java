@@ -6,6 +6,7 @@ import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.IngRecipeRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepUpdateDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.IngRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,8 @@ public class IngRecipeController {
     }
 
     @GetMapping("api/ingredient_recipe/all")
-    public List<IngredientRecipe> findAllIngRecipe(@RequestParam(name="page") int page, @RequestParam(name="size") int size){
-        return ingRecipeService.findAllIngRecipe(page, size).getContent();
+    public Page<IngredientRecipe> findAllIngRecipe(@RequestParam(name="page") int page, @RequestParam(name="size") int size){
+        return ingRecipeService.findAllIngRecipe(page, size);
     }
 
     @DeleteMapping("api/ingredient_recipe/delete")
@@ -32,13 +33,13 @@ public class IngRecipeController {
         ingRecipeService.deleteIngRecipe(idIngredient,idRecipe);
     }
 
-    @GetMapping("api/step/id")
-    public ResponseEntity<Step> findIngRecipe(@RequestParam String idIngredient, String idRecipe){
+    @GetMapping("api/ingredient_recipe/id")
+    public ResponseEntity<IngredientRecipe> findIngRecipe(@RequestParam String idIngredient, String idRecipe){
         return ingRecipeService.findIngRecipe(idIngredient,idRecipe);
     }
 
-    @PutMapping("api/step/update")
-    public ResponseEntity<Step> updateStep(StepUpdateDTO stepUpdateDTO){
-        return ingRecipeService.updateStep(stepUpdateDTO);
+    @PutMapping("api/ingredient_recipe/update")
+    public ResponseEntity<IngredientRecipe> updateStep(IngRecipeRecordDTO ingRecipeRecordDTO){
+        return ingRecipeService.updateIngRecipe(ingRecipeRecordDTO);
     }
 }

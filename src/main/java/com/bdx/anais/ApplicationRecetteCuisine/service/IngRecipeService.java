@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,62 +33,59 @@ public class IngRecipeService {
     private RecipeRepo recipeRepo;
 
     public ResponseEntity<IngredientRecipe> recordIngRecipe(IngRecipeRecordDTO ingRecipeRecordDTO) {
-        IngredientRecipe ingredientRecipe = new IngredientRecipe(ingRecipeRecordDTO);
+        IngredientRecipe ingredientRecipe = new IngredientRecipe();
+
+        EnumUnity enumUnity = EnumUnity.valueOf(ingRecipeRecordDTO.getUnity().toUpperCase());
+        ingredientRecipe.setUnity(enumUnity);
+        ingredientRecipe.setQuantity(ingRecipeRecordDTO.getQuantity());
+
         Recipe recipe = recipeService.findRecipe(ingRecipeRecordDTO.getIdRecipe()).getBody();
         Ingredient ingredient = ingredientService.findIngredient(ingRecipeRecordDTO.getIdIngredient()).getBody();
+
         ingredientRecipe.setIngredient(ingredient);
         ingredientRecipe.setRecipe(recipe);
         ingRecipeRepo.save(ingredientRecipe);
         return new ResponseEntity<IngredientRecipe>(ingredientRecipe, HttpStatus.CREATED);
-
-
     }
+
+
     public Page<IngredientRecipe> findAllIngRecipe(int page_number, int size) {
         Pageable page = PageRequest.of(page_number, size);
         return ingRecipeRepo.findAll(page);
     }
 
     public void deleteIngRecipe(String idIngredient, String idRecipe) {
-        UUID uuidIngredient = UUID.fromString(idIngredient);
-        UUID uuidRecipe = UUID.fromString(idRecipe);
-        Optional<Step> step = stepRepo.findById(uuidRecipe);
-        if (step.isPresent()) {
-            stepRepo.delete(step.get());
-        } else {
-            throwStepNotFound(uuidRecipe);
-        }
-
+        Recipe recipe = recipeService.findRecipe(idRecipe).getBody();
+        Ingredient ingredient = ingredientService.findIngredient(idIngredient).getBody();
+        ingRecipeRepo.deleteById(new IngredientRecipeId(recipe, ingredient));
     }
-    public ResponseEntity<Step> findIngRecipe(String idIngredient, String idRecipe) {
+
+
+    public ResponseEntity<IngredientRecipe> findIngRecipe(String idIngredient, String idRecipe) {
         UUID uuidRecipe = UUID.fromString(idRecipe);
         UUID uuidIngredient = UUID.fromString(idIngredient);
-        Optional<Recipe> recipe = recipeRepo.findById(uuidRecipe);
-        Optional<Ingredient> ingredient = ingredientRepo.findById(uuidIngredient);
-        if(recipe.isEmpty() || ingredient.isEmpty() ){
-            throwNotFound(uuidRecipe,uuidIngredient);
-        }
-        Optional<IngredientRecipeId> ingredientRecipeId = new IngredientRecipeId(recipe,ingredient)
-        Optional<Ingredient> ingredientRecipe = ingRecipeRepo.findById();
-        return new ResponseEntity<IngredientRecipe>(ING) HttpStatus.OK);
+        Recipe recipe = recipeRepo.findById(uuidRecipe).orElseThrow(() -> new IllegalArgumentException("Mon message "));
+        Ingredient ingredient = ingredientRepo.findById(uuidIngredient).orElseThrow(() -> new IllegalArgumentException("Mon message "));
+
+        IngredientRecipeId ingredientRecipeId = new IngredientRecipeId(recipe, ingredient);
+
+        IngredientRecipe ingredientRecipe = ingRecipeRepo.findById(ingredientRecipeId).orElseThrow(() -> new IllegalArgumentException("Mon message "));
+
+        return new ResponseEntity<IngredientRecipe>(ingredientRecipe, HttpStatus.OK);
 
     }
-    private void throwNotFound(UUID uuidRecipe, UUID uuidIngredient){
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe " + uuidRecipe + " or Ingredient "+ uuidIngredient + " not found in the DataBase");
-    }
 
-    private void throwStepNotFound(UUID uuidStep){
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Step " + uuidStep + " not found in the DataBase");
-    }
-
-    public ResponseEntity<Step> updateStep(StepUpdateDTO stepUpdateDTO) {
-        Step step = this.findStep(stepUpdateDTO.getStepId()).getBody();
-        Recipe recipe = recipeService.findRecipe(stepUpdateDTO.getIdRecette()).getBody();
-        assert step != null;
-        step.setNumStep(stepUpdateDTO.getNum_recette());
-        step.setDescription(stepUpdateDTO.getDescription());
-        step.setRecipe(recipe);
-        stepRepo.save(step);
-        return new ResponseEntity<Step>(step, HttpStatus.OK);
+    public ResponseEntity<IngredientRecipe> updateIngRecipe(IngRecipeRecordDTO ingRecipeRecordDTO) {
+        EnumUnity enumUnity = EnumUnity.valueOf(ingRecipeRecordDTO.getUnity().toUpperCase());
+        IngredientRecipe ingredientRecipe = this.findIngRecipe(ingRecipeRecordDTO.getIdIngredient(),ingRecipeRecordDTO.getIdRecipe()).getBody();
+//        if (!EnumUnity.isValid(ingRecipeRecordDTO.getUnity())) {
+//            throw new IllegalArgumentException("Invalid unity value: " + ingRecipeRecordDTO.getUnity()
+//                    + ". Must be one of " + Arrays.toString(EnumUnity.values()));
+//        }
+        ingredientRecipe.setUnity(enumUnity);
+        ingredientRecipe.setQuantity(ingRecipeRecordDTO.getQuantity());
+        ingRecipeRepo.save(ingredientRecipe);
+        return new ResponseEntity<IngredientRecipe>(ingredientRecipe, HttpStatus.OK);
     }
 
 

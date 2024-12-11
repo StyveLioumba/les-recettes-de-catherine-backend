@@ -476,11 +476,8 @@ public class IngredientService {
 
     public ResponseEntity<Ingredient> findIngredient(String id) {
         UUID uuid = UUID.fromString(id);
-        Optional<Ingredient> ingredient = ingredientRepo.findById(uuid);
-        if(ingredient.isEmpty()){
-            throwIngredientNotFound(uuid);
-        }
-        return new ResponseEntity<Ingredient>(ingredient.get(), HttpStatus.OK);
+        Ingredient ingredient = ingredientRepo.findById(uuid).orElseThrow(() -> new IllegalArgumentException("Ingredient non trouvé"));
+        return new ResponseEntity<Ingredient>(ingredient, HttpStatus.OK);
 
     }
     private void throwIngredientNotFound(UUID idIngredient){

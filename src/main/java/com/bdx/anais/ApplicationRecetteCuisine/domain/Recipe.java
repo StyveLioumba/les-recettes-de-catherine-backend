@@ -47,6 +47,9 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<IngredientRecipe> ingredientRecipe;
 
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Step> step;
+
 
     public Recipe(RecipeRecordDTO recipeDTO) {
         this.name = recipeDTO.getName();
@@ -123,11 +126,11 @@ public class Recipe {
         this.ingredientRecipe = ingredientRecipe;
     }
 
-    public TypeRecetteEnum getTyperecette() {
-        return typerecette;
+    public TypeRecetteEnum getTypeRecette() {
+        return typeRecette;
     }
 
-    public void setTyperecette(TypeRecetteEnum typerecette) {
-        this.typerecette = typerecette;
+    public void setTypeRecette(TypeRecetteEnum typeRecette) {
+        this.typeRecette = typeRecette;
     }
 }

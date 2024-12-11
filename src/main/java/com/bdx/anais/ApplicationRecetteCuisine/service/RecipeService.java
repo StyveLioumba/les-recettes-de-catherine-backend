@@ -47,11 +47,8 @@ public class RecipeService {
     }
     public ResponseEntity<Recipe> findRecipe(String id) {
         UUID uuid = UUID.fromString(id);
-        Optional<Recipe> recipe = recipeRepo.findById(uuid);
-        if(recipe.isEmpty()){
-            throwIngredientNotFound(uuid);
-        }
-        return new ResponseEntity<Recipe>(recipe.get(), HttpStatus.OK);
+        Recipe recipe = recipeRepo.findById(uuid).orElseThrow(() -> new IllegalArgumentException("Recette non trouvé"));
+        return new ResponseEntity<Recipe>(recipe, HttpStatus.OK);
 
     }
     private void throwIngredientNotFound(UUID uuidRecipe){
@@ -67,7 +64,7 @@ public class RecipeService {
         recipe.setCookingTimeMinutes(recipeDTO2.getCookingTimeMinutes());
         recipe.setTotalTimeMinutes(recipeDTO2.getPreparationTimeMinutes()+ recipeDTO2.getCookingTimeMinutes());
         recipe.setTips(recipeDTO2.getTips());
-        recipe.setTyperecette(recipeDTO2.getTypeRecette());
+        recipe.setTypeRecette(recipeDTO2.getTypeRecette());
         recipeRepo.save(recipe);
         return new ResponseEntity<Recipe>(recipe, HttpStatus.OK);
     }

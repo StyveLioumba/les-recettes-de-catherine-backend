@@ -10,8 +10,7 @@ import java.util.Optional;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 
 public class IngredientRecipeId implements Serializable {
 

@@ -7,7 +7,7 @@ public class IngRecipeRecordDTO {
     private String idRecipe;
     private String idIngredient;
     private Long quantity;
-    private EnumUnity unity;
+    private String unity;
 
     public String getIdRecipe() {
         return idRecipe;
@@ -33,11 +33,11 @@ public class IngRecipeRecordDTO {
         this.quantity = quantity;
     }
 
-    public EnumUnity getUnity() {
+    public String getUnity() {
         return unity;
     }
 
-    public void setUnity(EnumUnity unity) {
+    public void setUnity(String unity) {
         this.unity = unity;
     }
 }
