@@ -5,6 +5,7 @@ import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepUpdateDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.StepService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,8 @@ public class StepController {
     }
 
     @GetMapping("api/step/all")
-    public List<Step> findAllStep(@RequestParam(name="page") int page, @RequestParam(name="size") int size){
-        return stepService.findAllStep(page, size).getContent();
+    public Page<Step> findAllStep(@RequestParam(name="page") int page, @RequestParam(name="size") int size){
+        return stepService.findAllStep(page, size);
     }
 
     @DeleteMapping("api/step/delete")

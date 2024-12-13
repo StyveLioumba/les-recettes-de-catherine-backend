@@ -4,9 +4,8 @@ import java.util.UUID;
 
 public class StepRecordDTO {
 
-
+    private Integer numero_etape;
     private String idRecette ;
-    private Integer num_recette;
     private String description;
 
     public String getIdRecette() {
@@ -17,13 +16,6 @@ public class StepRecordDTO {
         this.idRecette = idRecette;
     }
 
-    public Integer getNum_recette() {
-        return num_recette;
-    }
-
-    public void setNum_recette(Integer num_recette) {
-        this.num_recette = num_recette;
-    }
 
     public String getDescription() {
         return description;
@@ -31,5 +23,13 @@ public class StepRecordDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getNumero_etape() {
+        return numero_etape;
+    }
+
+    public void setNumero_etape(Integer numero_etape) {
+        this.numero_etape = numero_etape;
     }
 }

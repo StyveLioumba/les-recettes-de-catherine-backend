@@ -1,12 +1,10 @@
 package com.bdx.anais.ApplicationRecetteCuisine.service.DTO;
 
-import java.util.UUID;
-
 public class StepUpdateDTO {
 
     private String stepId;
     private String idRecette;
-    private Integer num_recette;
+    private Integer num_etape;
     private String description;
 
     public String getStepId() {
@@ -25,12 +23,12 @@ public class StepUpdateDTO {
         this.idRecette = idRecette;
     }
 
-    public Integer getNum_recette() {
-        return num_recette;
+    public Integer getNum_etape() {
+        return num_etape;
     }
 
-    public void setNum_recette(Integer num_recette) {
-        this.num_recette = num_recette;
+    public void setNum_etape(Integer num_etape) {
+        this.num_etape = num_etape;
     }
 
     public String getDescription() {

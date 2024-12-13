@@ -1,7 +1,5 @@
 package com.bdx.anais.ApplicationRecetteCuisine.service.DTO;
 
-import com.bdx.anais.ApplicationRecetteCuisine.domain.TypeRecetteEnum;
-
 public class RecipeUpdateDTO {
 
     private String idRecipe;
@@ -10,7 +8,7 @@ public class RecipeUpdateDTO {
     private Integer preparationTimeMinutes;
     private Integer cookingTimeMinutes;
     private String tips;
-    private TypeRecetteEnum typeRecette;
+    private String categorieRecette;
 
     public String getIdRecipe() {
         return idRecipe;
@@ -60,11 +58,11 @@ public class RecipeUpdateDTO {
         this.tips = tips;
     }
 
-    public TypeRecetteEnum getTypeRecette() {
-        return typeRecette;
+    public String getCategorieRecette() {
+        return categorieRecette;
     }
 
-    public void setTypeRecette(TypeRecetteEnum typeRecette) {
-        this.typeRecette = typeRecette;
+    public void setCategorieRecette(String categorieRecette) {
+        this.categorieRecette = categorieRecette;
     }
 }

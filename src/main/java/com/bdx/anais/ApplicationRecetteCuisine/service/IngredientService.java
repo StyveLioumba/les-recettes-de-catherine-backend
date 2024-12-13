@@ -464,28 +464,19 @@ public class IngredientService {
     }
 
     public void deleteIngredient(String id) {
-        UUID uuid = UUID.fromString(id);
-        Optional<Ingredient> ingredient = ingredientRepo.findById(uuid);
-        if (ingredient.isPresent()) {
-            ingredientRepo.delete(ingredient.get());
-        } else {
-            throwIngredientNotFound(uuid);
-        }
-
+     ingredientRepo.deleteById(UUID.fromString(id));
     }
 
-    public ResponseEntity<Ingredient> findIngredient(String id) {
-        UUID uuid = UUID.fromString(id);
-        Ingredient ingredient = ingredientRepo.findById(uuid).orElseThrow(() -> new IllegalArgumentException("Ingredient non trouvé"));
+    public ResponseEntity<Ingredient> findIngredient(String idIngredient) {
+        UUID uuid = UUID.fromString(idIngredient);
+        Ingredient ingredient = ingredientRepo.findById(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingredient " +  idIngredient + " not found in the DataBase"));
         return new ResponseEntity<Ingredient>(ingredient, HttpStatus.OK);
 
-    }
-    private void throwIngredientNotFound(UUID idIngredient){
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingredient " +  idIngredient + " not found in the DataBase");
     }
 
     public ResponseEntity<Ingredient> updateIngredient(IngredientUpdateDTO ingredientDTO2) {
         Ingredient ingredient = this.findIngredient(ingredientDTO2.getIdIngredient()).getBody();
+        assert ingredient != null;
         ingredient.setName(ingredientDTO2.getIngName());
         ingredientRepo.save(ingredient);
         return new ResponseEntity<Ingredient>(ingredient, HttpStatus.OK);

@@ -5,6 +5,7 @@ import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.RecipeRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.RecipeUpdateDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +22,8 @@ public class RecipeController {
         return recipeService.recordRecipe(recipeDTO);
     }
     @GetMapping("api/recipe/all")
-    public List<Recipe> findAllRecipe(@RequestParam(name="page") int page, @RequestParam(name="size") int size){
-        return recipeService.findAllRecipe(page, size).getContent();
+    public Page<Recipe> findAllRecipe(@RequestParam(name="page") int page, @RequestParam(name="size") int size){
+        return recipeService.findAllRecipe(page, size);
     }
 
     @DeleteMapping("api/recipe/delete")

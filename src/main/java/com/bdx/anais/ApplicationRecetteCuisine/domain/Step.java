@@ -22,7 +22,7 @@ public class Step {
     @Id
     @Column(name = "step_id")
     @UuidGenerator
-    private UUID stepId;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
@@ -35,7 +35,7 @@ public class Step {
     private String description;
 
     public Step(StepRecordDTO stepDTO) {
-        this.numStep = stepDTO.getNum_recette();
+        this.numStep = stepDTO.getNumero_etape();
         this.description = stepDTO.getDescription();
     }
 

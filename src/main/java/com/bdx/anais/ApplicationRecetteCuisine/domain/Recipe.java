@@ -30,7 +30,7 @@ public class Recipe {
     private String picture;
 
     @Column(name = "recipe_type")
-    private TypeRecetteEnum typeRecette;
+    private CategorieRecetteEnum categorieRecetteEnum;
 
     @Column(name="recipe_total_time")
     private Integer totalTimeMinutes;
@@ -48,7 +48,7 @@ public class Recipe {
     private Set<IngredientRecipe> ingredientRecipe;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Step> step;
+    private Set<Step> steps;
 
 
     public Recipe(RecipeRecordDTO recipeDTO) {
@@ -58,7 +58,7 @@ public class Recipe {
         this.preparationTimeMinutes = recipeDTO.getPreparationTimeMinutes();
         this.cookingTimeMinutes = recipeDTO.getCookingTimeMinutes();
         this.tips = recipeDTO.getTips();
-        this.typeRecette = recipeDTO.getTypeRecette();
+        this.categorieRecetteEnum = recipeDTO.getCategorieRecetteEnum();
     }
 
 
@@ -126,11 +126,19 @@ public class Recipe {
         this.ingredientRecipe = ingredientRecipe;
     }
 
-    public TypeRecetteEnum getTypeRecette() {
-        return typeRecette;
+    public CategorieRecetteEnum getCategorieRecetteEnum() {
+        return categorieRecetteEnum;
     }
 
-    public void setTypeRecette(TypeRecetteEnum typeRecette) {
-        this.typeRecette = typeRecette;
+    public void setCategorieRecetteEnum(CategorieRecetteEnum categorieRecetteEnum) {
+        this.categorieRecetteEnum = categorieRecetteEnum;
+    }
+
+    public Set<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(Set<Step> steps) {
+        this.steps = steps;
     }
 }
