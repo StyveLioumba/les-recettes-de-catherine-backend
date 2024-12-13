@@ -78,10 +78,6 @@ public class IngRecipeService {
     public ResponseEntity<IngredientRecipe> updateIngRecipe(IngRecipeRecordDTO ingRecipeRecordDTO) {
         EnumUnity enumUnity = EnumUnity.valueOf(ingRecipeRecordDTO.getUnity().toUpperCase());
         IngredientRecipe ingredientRecipe = this.findIngRecipe(ingRecipeRecordDTO.getIdIngredient(),ingRecipeRecordDTO.getIdRecipe()).getBody();
-//        if (!EnumUnity.isValid(ingRecipeRecordDTO.getUnity())) {
-//            throw new IllegalArgumentException("Invalid unity value: " + ingRecipeRecordDTO.getUnity()
-//                    + ". Must be one of " + Arrays.toString(EnumUnity.values()));
-//        }
         ingredientRecipe.setUnity(enumUnity);
         ingredientRecipe.setQuantity(ingRecipeRecordDTO.getQuantity());
         ingRecipeRepo.save(ingredientRecipe);
