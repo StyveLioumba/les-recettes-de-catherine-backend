@@ -45,7 +45,4 @@
                docker rmi technostrea/poc-recettes-backend:stable-alpine -f
                echo "# Building the docker image"
                docker build -t technostrea/poc-recettes-backend:stable-alpine .
-               echo "# Suppression du dossier"
-               cd $HOME/wwwroot/poc-projects/poc-recettes/
-               find . -mindepth 1 ! -name 'compose.yaml' ! -name '.env' -exec rm -rf {} +
 
