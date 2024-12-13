@@ -18,6 +18,10 @@
        - name: Checkout repository
          uses: actions/checkout@v2
 
+       # Injecter le fichier .env via un secret
+       - name: Create .env file
+         run: echo "${{ secrets.ENV }}" > ./.env
+
        # Copier l'image dans le serveur de dev
        - name: copy file via ssh password
          uses: appleboy/scp-action@v0.1.7
@@ -45,4 +49,10 @@
                docker rmi technostrea/poc-recettes-backend:stable-alpine -f
                echo "# Building the docker image"
                docker build -t technostrea/poc-recettes-backend:stable-alpine .
+               echo "# Demarrage du compose"
+               docker compose up -d
+               echo "# Suppression du dossier"
+               cd $HOME/wwwroot/poc-projects/poc-recettes/
+               find . -mindepth 1 ! -name 'db' ! -name '.env' ! -name 'compose.yaml' ! -path './db/*' -exec rm -rf {} +
+
 
