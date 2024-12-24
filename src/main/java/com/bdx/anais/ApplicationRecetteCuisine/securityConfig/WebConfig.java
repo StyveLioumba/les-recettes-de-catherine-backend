@@ -15,7 +15,13 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200")//angular port
+                        .allowedOrigins(
+                                "http://localhost:4200",
+                                "https://les-recettes-de-catherine.fr",
+                                "https://dev.les-recettes-de-catherine.fr",
+                                "https://www.les-recettes-de-catherine.fr",
+                                "https://www.dev.les-recettes-de-catherine.fr"
+                        )//angular port
                         .allowedMethods(
                                 HttpMethod.GET.name(),
                                 HttpMethod.POST.name(),
