@@ -1,6 +1,6 @@
 package com.bdx.anais.ApplicationRecetteCuisine.domain;
 
-import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepRecordDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,8 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="tab_step" , schema = "recipe")
-
+@Table(name = "tab_step", schema = "recipe")
 public class Step {
 
     @Id
@@ -26,6 +25,7 @@ public class Step {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
+    @JsonIgnore
     private Recipe recipe;
 
     @Column(name = "step_num")
@@ -33,33 +33,4 @@ public class Step {
 
     @Column(name = "step_description")
     private String description;
-
-    public Step(StepRecordDTO stepDTO) {
-        this.numStep = stepDTO.getNumero_etape();
-        this.description = stepDTO.getDescription();
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public Integer getNumStep() {
-        return numStep;
-    }
-
-    public void setNumStep(Integer numStep) {
-        this.numStep = numStep;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

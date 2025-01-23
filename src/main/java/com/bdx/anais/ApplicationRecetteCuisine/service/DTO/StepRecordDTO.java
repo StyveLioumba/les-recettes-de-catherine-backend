@@ -1,11 +1,9 @@
 package com.bdx.anais.ApplicationRecetteCuisine.service.DTO;
 
-import java.util.UUID;
-
 public class StepRecordDTO {
 
     private Integer numero_etape;
-    private String idRecette ;
+    private String idRecette;
     private String description;
 
     public String getIdRecette() {

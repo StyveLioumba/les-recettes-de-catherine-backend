@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -27,7 +26,7 @@ public class IngredientService {
 
     private IngredientRepo ingredientRepo;
 
-    public List<Ingredient> insertion(){
+    public List<Ingredient> insertion() {
         ingredientRepo.deleteAll();
         ArrayList<Ingredient> listIngredients = new ArrayList<Ingredient>();
 
@@ -303,7 +302,6 @@ public class IngredientService {
         listIngredients.add(new Ingredient("langoustines"));
 
 
-
         //ingredient de base
         listIngredients.add(new Ingredient("œuf"));
         listIngredients.add(new Ingredient("farine de blé"));
@@ -372,7 +370,6 @@ public class IngredientService {
         listIngredients.add(new Ingredient("pâte à pizza"));
         listIngredients.add(new Ingredient("pâte sablée"));
         listIngredients.add(new Ingredient("pâte à choux"));
-
 
 
         //accompagnement
@@ -453,23 +450,26 @@ public class IngredientService {
     }
 
     public ResponseEntity<Ingredient> recordIngredient(IngredientRecordDTO ingredientDTO) {
-        Ingredient ingredient = new Ingredient(ingredientDTO) ;
+        Ingredient ingredient = new Ingredient();
+        ingredient.setName(ingredientDTO.getNomIngredient());
         ingredient = ingredientRepo.save(ingredient);
         return new ResponseEntity<Ingredient>(ingredient, HttpStatus.CREATED);
     }
 
-    public Page<Ingredient> findAllIngredient(int page_number, int size) {
+    public List<Ingredient> findAllIngredient(int page_number, int size) {
         Pageable page = PageRequest.of(page_number, size);
-        return ingredientRepo.findAll(page);
+        Page<Ingredient> ingredientPage = ingredientRepo.findAll(page);
+        List<Ingredient> ingredientList = ingredientPage.getContent();
+        return ingredientList;
     }
 
     public void deleteIngredient(String id) {
-     ingredientRepo.deleteById(UUID.fromString(id));
+        ingredientRepo.deleteById(UUID.fromString(id));
     }
 
     public ResponseEntity<Ingredient> findIngredient(String idIngredient) {
         UUID uuid = UUID.fromString(idIngredient);
-        Ingredient ingredient = ingredientRepo.findById(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingredient " +  idIngredient + " not found in the DataBase"));
+        Ingredient ingredient = ingredientRepo.findById(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ingredient " + idIngredient + " not found in the DataBase"));
         return new ResponseEntity<Ingredient>(ingredient, HttpStatus.OK);
 
     }
