@@ -2,10 +2,7 @@ package com.bdx.anais.ApplicationRecetteCuisine.service;
 
 import com.bdx.anais.ApplicationRecetteCuisine.domain.*;
 import com.bdx.anais.ApplicationRecetteCuisine.repository.IngRecipeRepo;
-import com.bdx.anais.ApplicationRecetteCuisine.repository.IngredientRepo;
-import com.bdx.anais.ApplicationRecetteCuisine.repository.RecipeRepo;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.IngRecipeRecordDTO;
-import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepUpdateDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,9 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.List;
 
 
 @Slf4j
@@ -29,10 +24,8 @@ public class IngRecipeService {
     private IngRecipeRepo ingRecipeRepo;
     private RecipeService recipeService;
     private IngredientService ingredientService;
-    private IngredientRepo ingredientRepo;
-    private RecipeRepo recipeRepo;
 
-    public ResponseEntity<IngredientRecipe> recordIngRecipe(IngRecipeRecordDTO ingRecipeRecordDTO) {
+    public IngredientRecipe recordIngRecipe(IngRecipeRecordDTO ingRecipeRecordDTO) {
         IngredientRecipe ingredientRecipe = new IngredientRecipe();
 
         EnumUnity enumUnity = EnumUnity.valueOf(ingRecipeRecordDTO.getUnity().toUpperCase());
@@ -44,14 +37,16 @@ public class IngRecipeService {
 
         ingredientRecipe.setIngredient(ingredient);
         ingredientRecipe.setRecipe(recipe);
-        ingRecipeRepo.save(ingredientRecipe);
-        return new ResponseEntity<IngredientRecipe>(ingredientRecipe, HttpStatus.CREATED);
+        ingredientRecipe = ingRecipeRepo.save(ingredientRecipe);
+        return ingredientRecipe;
     }
 
 
-    public Page<IngredientRecipe> findAllIngRecipe(int page_number, int size) {
+    public List<IngredientRecipe> findAllIngRecipe(int page_number, int size) {
         Pageable page = PageRequest.of(page_number, size);
-        return ingRecipeRepo.findAll(page);
+        Page<IngredientRecipe> ingredientRecipePage = ingRecipeRepo.findAll(page);
+        List<IngredientRecipe> ingredientRecipeList = ingredientRecipePage.getContent();
+        return ingredientRecipeList;
     }
 
     public void deleteIngRecipe(String idIngredient, String idRecipe) {
@@ -72,14 +67,13 @@ public class IngRecipeService {
 
     public ResponseEntity<IngredientRecipe> updateIngRecipe(IngRecipeRecordDTO ingRecipeRecordDTO) {
         EnumUnity enumUnity = EnumUnity.valueOf(ingRecipeRecordDTO.getUnity().toUpperCase());
-        IngredientRecipe ingredientRecipe = this.findIngRecipe(ingRecipeRecordDTO.getIdIngredient(),ingRecipeRecordDTO.getIdRecipe()).getBody();
+        IngredientRecipe ingredientRecipe = this.findIngRecipe(ingRecipeRecordDTO.getIdIngredient(), ingRecipeRecordDTO.getIdRecipe()).getBody();
         assert ingredientRecipe != null;
         ingredientRecipe.setUnity(enumUnity);
         ingredientRecipe.setQuantity(ingRecipeRecordDTO.getQuantity());
         ingRecipeRepo.save(ingredientRecipe);
         return new ResponseEntity<IngredientRecipe>(ingredientRecipe, HttpStatus.OK);
     }
-
 
 
 }

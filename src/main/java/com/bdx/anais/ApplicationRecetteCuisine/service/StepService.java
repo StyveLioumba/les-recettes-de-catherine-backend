@@ -2,6 +2,7 @@ package com.bdx.anais.ApplicationRecetteCuisine.service;
 
 import com.bdx.anais.ApplicationRecetteCuisine.domain.Recipe;
 import com.bdx.anais.ApplicationRecetteCuisine.domain.Step;
+import com.bdx.anais.ApplicationRecetteCuisine.repository.RecipeRepo;
 import com.bdx.anais.ApplicationRecetteCuisine.repository.StepRepo;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepUpdateDTO;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -24,29 +26,28 @@ import java.util.UUID;
 public class StepService {
 
     private StepRepo stepRepo;
-    private RecipeService recipeService;
+    private RecipeRepo recipeRepo;
 
 
     public ResponseEntity<Step> recordStep(StepRecordDTO stepDTO) {
-        Step step = new Step(stepDTO);
-        step.setNumStep(stepDTO.getNumero_etape());
-//        if (stepRepo.countStep() == 0){
-//            step.setNumStep(1); ;
-//        } else {
-//            step.setNumStep(stepRepo.findMaxVisitId(stepDTO.getIdRecette()) + 1);
-//        }
 
-        Recipe recipe = recipeService.findRecipe(stepDTO.getIdRecette()).getBody();
+        UUID uuidRecipe = UUID.fromString(stepDTO.getIdRecette());
+        Recipe recipe = recipeRepo.findById(uuidRecipe).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe " + uuidRecipe + " not found in the DataBase"));
+
+        Step step = new Step();
         step.setRecipe(recipe);
+        step.setNumStep(stepDTO.getNumero_etape());
         step.setDescription(stepDTO.getDescription());
-        stepRepo.save(step);
-        return new ResponseEntity<Step>(step, HttpStatus.CREATED);
 
-
+        step = stepRepo.save(step);
+        return new ResponseEntity<>(step, HttpStatus.CREATED);
     }
-    public Page<Step> findAllStep(int page_number, int size) {
+
+    public List<Step> findAllStep(int page_number, int size) {
         Pageable page = PageRequest.of(page_number, size);
-        return stepRepo.findAll(page);
+        Page<Step> stepPage = stepRepo.findAll(page);
+        List<Step> stepList = stepPage.getContent();
+        return stepList;
     }
 
 
@@ -55,7 +56,7 @@ public class StepService {
     }
 
 
-    public ResponseEntity<Step> findStep(String idStep){
+    public ResponseEntity<Step> findStep(String idStep) {
         UUID uuidStep = UUID.fromString(idStep);
         Step step = stepRepo.findById(uuidStep).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Step " + uuidStep + " not found in the DataBase"));
         return new ResponseEntity<Step>(step, HttpStatus.OK);
@@ -64,7 +65,8 @@ public class StepService {
 
     public ResponseEntity<Step> updateStep(StepUpdateDTO stepUpdateDTO) {
         Step step = this.findStep(stepUpdateDTO.getStepId()).getBody();
-        Recipe recipe = recipeService.findRecipe(stepUpdateDTO.getIdRecette()).getBody();
+        UUID uuidRecipe = UUID.fromString(stepUpdateDTO.getIdRecette());
+        Recipe recipe = recipeRepo.findById(uuidRecipe).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe " + uuidRecipe + " not found in the DataBase"));
         assert step != null;
         step.setNumStep(stepUpdateDTO.getNum_etape());
         step.setDescription(stepUpdateDTO.getDescription());

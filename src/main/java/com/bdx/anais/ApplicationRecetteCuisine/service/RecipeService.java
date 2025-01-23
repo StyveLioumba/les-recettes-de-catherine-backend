@@ -1,7 +1,7 @@
 package com.bdx.anais.ApplicationRecetteCuisine.service;
 
-import com.bdx.anais.ApplicationRecetteCuisine.domain.Recipe;
 import com.bdx.anais.ApplicationRecetteCuisine.domain.CategorieRecetteEnum;
+import com.bdx.anais.ApplicationRecetteCuisine.domain.Recipe;
 import com.bdx.anais.ApplicationRecetteCuisine.repository.RecipeRepo;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.RecipeRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.RecipeUpdateDTO;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -25,14 +26,26 @@ public class RecipeService {
 
     private RecipeRepo recipeRepo;
 
-    public ResponseEntity<Recipe> recordRecipe(RecipeRecordDTO recipeDTO) {
-        Recipe recipe = new Recipe(recipeDTO) ;
+    public Recipe recordRecipe(RecipeRecordDTO recipeDTO) {
+        Recipe recipe = new Recipe();
+
+        recipe.setName(recipeDTO.getName());
+        recipe.setPicture(recipeDTO.getPicture());
+        recipe.setTotalTimeMinutes(recipeDTO.getPreparationTimeMinutes() + recipeDTO.getCookingTimeMinutes());
+        recipe.setPreparationTimeMinutes(recipeDTO.getPreparationTimeMinutes());
+        recipe.setCookingTimeMinutes(recipeDTO.getCookingTimeMinutes());
+        recipe.setTips(recipeDTO.getTips());
+        recipe.setCategorieRecetteEnum(recipeDTO.getCategorieRecetteEnum());
+
         recipe = recipeRepo.save(recipe);
-        return new ResponseEntity<Recipe>(recipe, HttpStatus.CREATED);
+        return recipe;
     }
-    public Page<Recipe> findAllRecipe(int page_number, int size) {
+
+    public List<Recipe> findAllRecipe(int page_number, int size) {
         Pageable page = PageRequest.of(page_number, size);
-        return recipeRepo.findAll(page);
+        Page<Recipe> recipePage = recipeRepo.findAll(page);
+        List<Recipe> recipeList = recipePage.getContent();
+        return recipeList;
     }
 
     public void deleteRecipe(String idRecipe) {
@@ -45,15 +58,17 @@ public class RecipeService {
         return new ResponseEntity<Recipe>(recipe, HttpStatus.OK);
 
     }
+
     public ResponseEntity<Recipe> updateRecipe(RecipeUpdateDTO recipeUpdateDTO) {
-        Recipe recipe = this.findRecipe(recipeUpdateDTO.getIdRecipe()).getBody();
+        UUID uuidRecipe = UUID.fromString(recipeUpdateDTO.getIdRecipe());
+        Recipe recipe = recipeRepo.findById(uuidRecipe).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe " + uuidRecipe + " not found in the DataBase"));
         CategorieRecetteEnum recetteEnum = CategorieRecetteEnum.valueOf(recipeUpdateDTO.getCategorieRecette().toUpperCase());
-        assert recipe != null;
+        //assert recipe != null;
         recipe.setName(recipeUpdateDTO.getName());
         recipe.setPicture(recipeUpdateDTO.getPicture());
         recipe.setPreparationTimeMinutes(recipeUpdateDTO.getPreparationTimeMinutes());
         recipe.setCookingTimeMinutes(recipeUpdateDTO.getCookingTimeMinutes());
-        recipe.setTotalTimeMinutes(recipeUpdateDTO.getPreparationTimeMinutes()+ recipeUpdateDTO.getCookingTimeMinutes());
+        recipe.setTotalTimeMinutes(recipeUpdateDTO.getPreparationTimeMinutes() + recipeUpdateDTO.getCookingTimeMinutes());
         recipe.setTips(recipeUpdateDTO.getTips());
         recipe.setCategorieRecetteEnum(recetteEnum);
         recipeRepo.save(recipe);
