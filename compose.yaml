@@ -1,0 +1,60 @@
+x-status: &status
+  restart: unless-stopped
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+x-env: &env-file
+  env_file:
+    - .env
+
+x-networks: &networks
+  networks:
+    - traefik
+
+x-labels: &labels
+  labels:
+    - 'traefik.enable=true'
+    - 'traefik.docker.network=traefik-net'
+
+    ## HTTPS Routers
+    - 'traefik.http.routers.recettes-backend.rule=Host(`rec-back.${DOMAINE_NAME_OR_STATIC_IP}`)'
+    - 'traefik.http.routers.recettes-backend.entrypoints=websecure'
+    - 'traefik.http.routers.recettes-backend.tls=true'
+    - 'traefik.http.routers.recettes-backend.tls.certresolver=letsencrypt'
+
+    ## HTTPS Services
+    - 'traefik.http.routers.recettes-backend.service=recettes-backend-svc'
+    - 'traefik.http.services.recettes-backend-svc.loadbalancer.server.port=8080'
+
+networks:
+  traefik:
+    name: traefik-net
+    external: true
+
+services:
+  app:
+    image: technostrea/poc-recettes-backend:stable-alpine
+    container_name: recettes-backend
+    <<:
+      - *status
+      - *env-file
+      - *networks
+      - *labels
+    depends_on:
+      - db
+  db:
+    image: postgres:alpine3.18
+    container_name: db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    <<:
+      - *status
+      - *env-file
+      - *networks
+    volumes:
+      - ./db/init-scripts:/docker-entrypoint-initdb.d
