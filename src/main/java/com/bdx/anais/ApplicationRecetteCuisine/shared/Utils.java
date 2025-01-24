@@ -10,8 +10,8 @@ public class Utils {
                 myPage.getTotalPages(),
                 String.valueOf(myPage.getNumber()),
                 String.valueOf(myPage.getSize()),
-                myPage.hasPrevious() ? String.valueOf(myPage.getNumber() - 1) : null,
-                myPage.hasNext() ? String.valueOf(myPage.getNumber() + 1) : null
+                myPage.hasPrevious() ? String.valueOf(myPage.getNumber() - 1) : String.valueOf(0),
+                myPage.hasNext() ? String.valueOf(myPage.getNumber() + 1) : String.valueOf(0)
         );
     }
 }
