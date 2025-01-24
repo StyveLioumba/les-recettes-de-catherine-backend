@@ -3,6 +3,9 @@ package com.bdx.anais.ApplicationRecetteCuisine.service;
 import com.bdx.anais.ApplicationRecetteCuisine.domain.*;
 import com.bdx.anais.ApplicationRecetteCuisine.repository.IngRecipeRepo;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.IngRecipeRecordDTO;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.Utils;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.ApiResponse;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -42,11 +45,20 @@ public class IngRecipeService {
     }
 
 
-    public List<IngredientRecipe> findAllIngRecipe(int page_number, int size) {
+    public ApiResponse<List<IngredientRecipe>> findAllIngRecipe(int page_number, int size) {
         Pageable page = PageRequest.of(page_number, size);
         Page<IngredientRecipe> ingredientRecipePage = ingRecipeRepo.findAll(page);
         List<IngredientRecipe> ingredientRecipeList = ingredientRecipePage.getContent();
-        return ingredientRecipeList;
+
+
+        MetaData metaData = Utils.getMetaData(ingredientRecipePage);
+
+        return ApiResponse.<List<IngredientRecipe>>builder()
+                .status(HttpStatus.OK.getReasonPhrase().toLowerCase())
+                .code(HttpStatus.OK.value())
+                .content(ingredientRecipeList)
+                .meta(metaData)
+                .build();
     }
 
     public void deleteIngRecipe(String idIngredient, String idRecipe) {

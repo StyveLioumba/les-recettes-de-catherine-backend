@@ -4,6 +4,7 @@ import com.bdx.anais.ApplicationRecetteCuisine.domain.Recipe;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.RecipeRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.RecipeUpdateDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.RecipeService;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,8 @@ public class RecipeController {
     }
 
     @GetMapping("api/recipe/all")
-    public ResponseEntity<List<Recipe>> findAllRecipe(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
-        List<Recipe> recipes = recipeService.findAllRecipe(page, size);
+    public ResponseEntity<ApiResponse<List<Recipe>>> findAllRecipe(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+        ApiResponse<List<Recipe>> recipes = recipeService.findAllRecipe(page, size);
         return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 

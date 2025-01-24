@@ -6,6 +6,9 @@ import com.bdx.anais.ApplicationRecetteCuisine.repository.RecipeRepo;
 import com.bdx.anais.ApplicationRecetteCuisine.repository.StepRepo;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepUpdateDTO;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.Utils;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.ApiResponse;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,11 +46,19 @@ public class StepService {
         return new ResponseEntity<>(step, HttpStatus.CREATED);
     }
 
-    public List<Step> findAllStep(int page_number, int size) {
+    public ApiResponse<List<Step>> findAllStep(int page_number, int size) {
         Pageable page = PageRequest.of(page_number, size);
         Page<Step> stepPage = stepRepo.findAll(page);
         List<Step> stepList = stepPage.getContent();
-        return stepList;
+
+        MetaData metaData = Utils.getMetaData(stepPage);
+
+        return ApiResponse.<List<Step>>builder()
+                .status(HttpStatus.OK.getReasonPhrase().toLowerCase())
+                .code(HttpStatus.OK.value())
+                .content(stepList)
+                .meta(metaData)
+                .build();
     }
 
 
