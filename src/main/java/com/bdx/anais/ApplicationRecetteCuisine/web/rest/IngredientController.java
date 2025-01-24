@@ -4,6 +4,7 @@ import com.bdx.anais.ApplicationRecetteCuisine.domain.Ingredient;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.IngredientRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.IngredientUpdateDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.IngredientService;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class IngredientController {
     }
 
     @GetMapping("api/ingredient/all")
-    public ResponseEntity<List<Ingredient>> findAllIngredient(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
-        List<Ingredient> ingredients = ingredientService.findAllIngredient(page, size);
+    public ResponseEntity<ApiResponse<List<Ingredient>>> findAllIngredient(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+        ApiResponse<List<Ingredient>> ingredients = ingredientService.findAllIngredient(page, size);
         return new ResponseEntity<>(ingredients, HttpStatus.OK);
     }
 

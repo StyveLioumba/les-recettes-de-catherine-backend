@@ -4,6 +4,7 @@ import com.bdx.anais.ApplicationRecetteCuisine.domain.Step;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.StepUpdateDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.StepService;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class StepController {
     }
 
     @GetMapping("api/step/all")
-    public ResponseEntity<List<Step>> findAllStep(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
-        List<Step> steps = stepService.findAllStep(page, size);
+    public ResponseEntity<ApiResponse<List<Step>>> findAllStep(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+        ApiResponse<List<Step>> steps = stepService.findAllStep(page, size);
         return new ResponseEntity<>(steps, HttpStatus.OK);
     }
 

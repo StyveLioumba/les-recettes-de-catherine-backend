@@ -4,6 +4,9 @@ import com.bdx.anais.ApplicationRecetteCuisine.domain.Ingredient;
 import com.bdx.anais.ApplicationRecetteCuisine.repository.IngredientRepo;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.IngredientRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.IngredientUpdateDTO;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.Utils;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.ApiResponse;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.MetaData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -456,11 +459,19 @@ public class IngredientService {
         return new ResponseEntity<Ingredient>(ingredient, HttpStatus.CREATED);
     }
 
-    public List<Ingredient> findAllIngredient(int page_number, int size) {
+    public ApiResponse<List<Ingredient>> findAllIngredient(int page_number, int size) {
         Pageable page = PageRequest.of(page_number, size);
         Page<Ingredient> ingredientPage = ingredientRepo.findAll(page);
         List<Ingredient> ingredientList = ingredientPage.getContent();
-        return ingredientList;
+
+        MetaData metaData = Utils.getMetaData(ingredientPage);
+
+        return ApiResponse.<List<Ingredient>>builder()
+                .status(HttpStatus.OK.getReasonPhrase().toLowerCase())
+                .code(HttpStatus.OK.value())
+                .content(ingredientList)
+                .meta(metaData)
+                .build();
     }
 
     public void deleteIngredient(String id) {

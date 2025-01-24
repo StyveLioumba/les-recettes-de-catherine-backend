@@ -3,6 +3,7 @@ package com.bdx.anais.ApplicationRecetteCuisine.web.rest;
 import com.bdx.anais.ApplicationRecetteCuisine.domain.IngredientRecipe;
 import com.bdx.anais.ApplicationRecetteCuisine.service.DTO.IngRecipeRecordDTO;
 import com.bdx.anais.ApplicationRecetteCuisine.service.IngRecipeService;
+import com.bdx.anais.ApplicationRecetteCuisine.shared.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class IngRecipeController {
     }
 
     @GetMapping("api/ingredient_recipe/all")
-    public ResponseEntity<List<IngredientRecipe>> findAllIngRecipe(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
-        List<IngredientRecipe> ingredientRecipes = ingRecipeService.findAllIngRecipe(page, size);
+    public ResponseEntity<ApiResponse<List<IngredientRecipe>>> findAllIngRecipe(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+        ApiResponse<List<IngredientRecipe>> ingredientRecipes = ingRecipeService.findAllIngRecipe(page, size);
         return new ResponseEntity<>(ingredientRecipes, HttpStatus.OK);
     }
 
