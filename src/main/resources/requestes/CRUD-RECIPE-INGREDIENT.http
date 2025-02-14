@@ -1,0 +1,52 @@
+@baseUrl = http://localhost:8080/api/ingredient_recipe
+@page = 0
+@size = 10
+
+@recipeId = ffb777d2-a84f-4af1-8597-124dae9d8d48
+@ingredientId = 6922e665-328d-445a-b45a-4d57184967d4
+
+# lier un igredient a une recette
+POST {{baseUrl}}/create
+Content-Type: application/json
+Accept: application/json
+
+{
+  "idRecipe": "{{recipeId}}",
+  "idIngredient": "{{ingredientId}}",
+  "quantity": 1,
+  "unity": "CUILLERE_CAFE"
+}
+
+
+###
+
+GET {{baseUrl}}/all?page={{page}}&size={{size}}
+accept: application/json
+
+
+###
+
+GET {{baseUrl}}/find?idRecipe={{recipeId}}&idIngredient={{ingredientId}}
+accept: application/json
+
+###
+
+GET {{baseUrl}}/findByRecipeId/1e20da2e-7db7-445a-9530-2b92261126c1
+accept: application/json
+
+
+###
+
+PUT {{baseUrl}}/update?idRecipe={{recipeId}}&idIngredient={{ingredientId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "quantity": 2,
+  "unity": "CUILLERE_SOUPE"
+}
+
+
+###
+DELETE {{baseUrl}}/delete?idRecipe={{recipeId}}&idIngredient={{ingredientId}}
+accept: application/json

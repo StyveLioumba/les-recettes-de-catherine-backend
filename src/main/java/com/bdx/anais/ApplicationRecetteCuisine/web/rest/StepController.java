@@ -29,9 +29,9 @@ public class StepController {
         return new ResponseEntity<>(steps, HttpStatus.OK);
     }
 
-    @DeleteMapping("api/step/delete")
-    public void deletStep(String idStep) {
-        stepService.deleteStep(idStep);
+    @DeleteMapping("api/step/delete/{id}")
+    public void deletStep(@PathVariable String id) {
+        stepService.deleteStep(id);
     }
 
     @GetMapping("api/step/{id}")
@@ -39,8 +39,8 @@ public class StepController {
         return stepService.findStep(id);
     }
 
-    @PutMapping("api/step/update")
-    public ResponseEntity<Step> updateStep(StepUpdateDTO stepUpdateDTO) {
-        return stepService.updateStep(stepUpdateDTO);
+    @PutMapping("api/step/update/{id}")
+    public ResponseEntity<Step> updateStep(@PathVariable String id, @RequestBody StepUpdateDTO stepUpdateDTO) {
+        return stepService.updateStep(id , stepUpdateDTO);
     }
 }

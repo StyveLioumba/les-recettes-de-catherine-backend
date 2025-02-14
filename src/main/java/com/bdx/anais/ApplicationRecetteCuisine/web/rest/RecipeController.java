@@ -7,8 +7,10 @@ import com.bdx.anais.ApplicationRecetteCuisine.service.RecipeService;
 import com.bdx.anais.ApplicationRecetteCuisine.shared.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,8 +32,8 @@ public class RecipeController {
         return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 
-    @DeleteMapping("api/recipe/delete")
-    public void deleteRecipe(String id) {
+    @DeleteMapping("api/recipe/delete/{id}")
+    public void deleteRecipe(@PathVariable String id) {
         recipeService.deleteRecipe(id);
     }
 
@@ -40,8 +42,17 @@ public class RecipeController {
         return recipeService.findRecipe(id);
     }
 
-    @PutMapping("api/recipe/update")
-    public ResponseEntity<Recipe> updateRecipe(RecipeUpdateDTO recipeDTO2) {
-        return recipeService.updateRecipe(recipeDTO2);
+
+    @PutMapping("api/recipe/update/{id}")
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable String id,@RequestBody RecipeUpdateDTO recipeDTO2) {
+        return recipeService.updateRecipe(id,recipeDTO2);
     }
+
+    @PostMapping(value = "api/recipe/uploadRecipePictures/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadFile(@RequestParam("files") MultipartFile[] files, @PathVariable String id) {
+        recipeService.updateRecipePicture(files,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

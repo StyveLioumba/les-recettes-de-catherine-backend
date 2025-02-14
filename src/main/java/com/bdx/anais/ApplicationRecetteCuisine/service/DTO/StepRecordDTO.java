@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class StepRecordDTO {
 
-    private Integer numero_etape;
+    private Integer numStep;
     private String idRecette;
     private String description;
 

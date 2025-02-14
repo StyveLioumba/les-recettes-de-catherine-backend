@@ -29,7 +29,7 @@ public class IngredientService {
 
     private IngredientRepo ingredientRepo;
 
-    public List<Ingredient> insertion() {
+    public List<Ingredient> initialInsertion() {
         ingredientRepo.deleteAll();
         ArrayList<Ingredient> listIngredients = new ArrayList<Ingredient>();
 
@@ -452,6 +452,10 @@ public class IngredientService {
         return ingredientRepo.saveAll(listIngredients);
     }
 
+    public List<Ingredient> getIngredient(){
+        return ingredientRepo.findAll();
+    }
+
     public ResponseEntity<Ingredient> recordIngredient(IngredientRecordDTO ingredientDTO) {
         Ingredient ingredient = new Ingredient();
         ingredient.setName(ingredientDTO.getNomIngredient());
@@ -485,10 +489,10 @@ public class IngredientService {
 
     }
 
-    public ResponseEntity<Ingredient> updateIngredient(IngredientUpdateDTO ingredientDTO2) {
-        Ingredient ingredient = this.findIngredient(ingredientDTO2.getIdIngredient()).getBody();
+    public ResponseEntity<Ingredient> updateIngredient(String id , IngredientUpdateDTO ingredientDTO2) {
+        Ingredient ingredient = this.findIngredient(id).getBody();
         assert ingredient != null;
-        ingredient.setName(ingredientDTO2.getIngName());
+        ingredient.setName(ingredientDTO2.getNomIngredient());
         ingredientRepo.save(ingredient);
         return new ResponseEntity<Ingredient>(ingredient, HttpStatus.OK);
     }

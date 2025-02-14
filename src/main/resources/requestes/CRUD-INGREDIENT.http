@@ -1,0 +1,43 @@
+@baseUrl = http://localhost:8080/api/ingredient
+@page = 0
+@size = 10
+
+# Création d'un ingrédient
+
+POST {{baseUrl}}/create
+Content-Type: application/json
+
+{
+    "nomIngredient": "Tomate cerise"
+}
+
+###
+
+# Récupération de la liste des ingrédients
+
+GET {{baseUrl}}/all?page={{page}}&size={{size}}
+Accept: application/json
+
+###
+
+# Récupération d'un ingrédient
+GET {{baseUrl}}/b585c983-e358-457f-a033-0674522b956a
+Accept: application/json
+
+###
+
+# Modification d'un ingrédient
+PUT {{baseUrl}}/update/b585c983-e358-457f-a033-0674522b956a
+Content-Type: application/json
+Accept: application/json
+
+{
+    "nomIngredient": "Tomate cerise"
+}
+
+
+###
+
+# Suppression d'un ingrédient
+DELETE {{baseUrl}}/delete/b585c983-e358-457f-a033-0674522b956a
+Accept: application/json

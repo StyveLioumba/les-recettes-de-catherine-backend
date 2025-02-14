@@ -39,8 +39,13 @@ public class StepService {
 
         Step step = new Step();
         step.setRecipe(recipe);
-        step.setNumStep(stepDTO.getNumero_etape());
+        step.setNumStep(stepDTO.getNumStep());
         step.setDescription(stepDTO.getDescription());
+
+        stepRepo.findByNumStepAndDescriptionAndRecipe(step.getNumStep(), step.getDescription(), recipe).ifPresent(s -> {
+            //throw new ResponseStatusException(HttpStatus.CONFLICT, "Step already exists in the DataBase");
+            deleteStep(s.getId().toString());
+        });
 
         step = stepRepo.save(step);
         return new ResponseEntity<>(step, HttpStatus.CREATED);
@@ -74,12 +79,12 @@ public class StepService {
     }
 
 
-    public ResponseEntity<Step> updateStep(StepUpdateDTO stepUpdateDTO) {
-        Step step = this.findStep(stepUpdateDTO.getStepId()).getBody();
+    public ResponseEntity<Step> updateStep(String id, StepUpdateDTO stepUpdateDTO) {
+        Step step = this.findStep(id).getBody();
         UUID uuidRecipe = UUID.fromString(stepUpdateDTO.getIdRecette());
         Recipe recipe = recipeRepo.findById(uuidRecipe).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe " + uuidRecipe + " not found in the DataBase"));
         assert step != null;
-        step.setNumStep(stepUpdateDTO.getNum_etape());
+        step.setNumStep(stepUpdateDTO.getNumStep());
         step.setDescription(stepUpdateDTO.getDescription());
         step.setRecipe(recipe);
         stepRepo.save(step);

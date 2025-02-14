@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:8080/api/step
+@page = 0
+@size = 10
+
+# Création d'une étape
+
+POST {{baseUrl}}/create
+Content-Type: application/json
+
+{
+  "numStep": 2,
+  "idRecette": "78a6fd20-2949-4050-a5c1-f1b6eb02aef1",
+  "description": "etape 2"
+}
+
+
+###
+
+# Récupération de toutes les étapes
+GET {{baseUrl}}/all?page={{page}}&size={{size}}
+Accept: application/json
+
+###
+
+# Récupération d'une étape par son id
+GET {{baseUrl}}/922444be-9f18-4658-b222-f8d7913b4823
+Accept: application/json
+
+
+###
+
+# Mise à jour d'une étape par son id
+PUT {{baseUrl}}/update/922444be-9f18-4658-b222-f8d7913b4823
+Accept: application/json
+content-type: application/json
+
+{
+  "numStep": 1,
+  "idRecette": "78a6fd20-2949-4050-a5c1-f1b6eb02aef1",
+  "description": "etape 1 updated"
+}
+
+###
+
+# Suppression d'une étape par son id
+DELETE {{baseUrl}}/delete/922444be-9f18-4658-b222-f8d7913b4823
+Accept: application/json

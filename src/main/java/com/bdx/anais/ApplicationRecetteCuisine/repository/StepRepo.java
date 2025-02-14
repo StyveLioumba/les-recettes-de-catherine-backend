@@ -1,9 +1,11 @@
 package com.bdx.anais.ApplicationRecetteCuisine.repository;
 
+import com.bdx.anais.ApplicationRecetteCuisine.domain.Recipe;
 import com.bdx.anais.ApplicationRecetteCuisine.domain.Step;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -17,4 +19,7 @@ public interface StepRepo extends JpaRepository<Step, UUID> {
 //    @Query(value = "SELECT count(step_num) FROM recipe.step s where s.recipe_id = recette",
 //            nativeQuery = true)
 //    Integer countStep();
+
+
+    Optional<Step> findByNumStepAndDescriptionAndRecipe(Integer numStep, String description, Recipe recipe);
 }

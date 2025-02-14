@@ -1,0 +1,80 @@
+
+# Configuration des variables
+@baseUrl = http://localhost:8080/api/recipe
+@page = 0
+@size = 10
+
+
+POST {{baseUrl}}/create
+Content-Type: application/json
+
+{
+  "name": "recette 1",
+  "picture": "image 1",
+  "preparationTimeMinutes": 0,
+  "cookingTimeMinutes": 0,
+  "tips": "amour",
+  "categorieRecetteEnum": "ENTREE"
+}
+
+###
+
+# Récupération de toutes les recettes
+GET {{baseUrl}}/all?page={{page}}&size={{size}}
+Accept: application/json
+
+
+###
+
+# Récupération d'une recette par son id
+GET {{baseUrl}}/4abebe59-7347-43a9-b876-70159505ae0a
+Accept: application/json
+
+###
+
+# Mise à jour d'une recette par son id
+PUT {{baseUrl}}/update/4abebe59-7347-43a9-b876-70159505ae0a
+Accept: application/json
+content-type: application/json
+
+{
+  "idRecipe": "4abebe59-7347-43a9-b876-70159505ae0a",
+  "name": "recette 1 updated",
+  "picture": "image 1",
+  "preparationTimeMinutes": 0,
+  "cookingTimeMinutes": 0,
+  "tips": "amour",
+  "categorieRecetteEnum": "ENTREE"
+}
+
+###
+
+# Suppression d'une recette par son id
+DELETE {{baseUrl}}/delete/78a6fd20-2949-4050-a5c1-f1b6eb02aef1
+
+###
+
+# telecharger une images
+
+POST {{baseUrl}}/uploadRecipePictures/93506f5c-f4be-4ee5-a266-21e19d44f779
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="files" ; filename="SLI-Ing-DEVOPS.pdf"
+
+< /Users/styvelioumba/Downloads/SLI-Ing-DEVOPS.pdf
+--WebAppBoundary--
+
+###
+
+
+POST {{baseUrl}}/uploadRecipePictures
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="files" ; filename="filename.extension"
+
+< /Path to the file/filename.extension
+--WebAppBoundary--
+
+###

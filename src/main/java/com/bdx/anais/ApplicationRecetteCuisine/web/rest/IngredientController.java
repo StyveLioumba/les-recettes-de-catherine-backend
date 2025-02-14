@@ -29,8 +29,8 @@ public class IngredientController {
         return new ResponseEntity<>(ingredients, HttpStatus.OK);
     }
 
-    @DeleteMapping("api/ingredient/delete")
-    public void deleteIngredient(String id) {
+    @DeleteMapping("api/ingredient/delete/{id}")
+    public void deleteIngredient(@PathVariable String id) {
         ingredientService.deleteIngredient(id);
     }
 
@@ -39,13 +39,13 @@ public class IngredientController {
         return ingredientService.findIngredient(id);
     }
 
-    @PutMapping("api/ingredient/update")
-    public ResponseEntity<Ingredient> updatePatient(IngredientUpdateDTO ingredientDTO2) {
-        return ingredientService.updateIngredient(ingredientDTO2);
+    @PutMapping("api/ingredient/update/{id}")
+    public ResponseEntity<Ingredient> updatePatient(@PathVariable String id, @RequestBody IngredientUpdateDTO ingredientDTO2) {
+        return ingredientService.updateIngredient(id, ingredientDTO2);
     }
 
     @GetMapping("/api/ingredients")
     public List<Ingredient> insertion() {
-        return ingredientService.insertion();
+        return ingredientService.getIngredient();
     }
 }

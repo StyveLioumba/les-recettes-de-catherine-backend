@@ -43,9 +43,9 @@ public class Recipe {
     @Column(name = "recipe_tips")
     private String tips;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     private List<IngredientRecipe> ingredientRecipe = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe" , cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     private List<Step> steps = new ArrayList<>();
 }
