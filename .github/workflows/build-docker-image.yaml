@@ -40,11 +40,27 @@ jobs:
 #            type=raw,value=dev-latest,enable=${{ github.ref_name != 'main'}}
 #            type=raw,value=latest,enable=${{ github.ref_name == 'main'}}
 #            type=sha,format=short,prefix=dev-,enable=${{ github.ref_name != 'main'}}
+#      labels: |
+#        org.opencontainers.image.title=Recettes de Catherine
+#        org.opencontainers.image.description=Application de gestion des recettes
+#        org.opencontainers.image.version=${{ github.run_number }}
+#        org.opencontainers.image.created=${{ github.event.repository.updated_at }}
+#        org.opencontainers.image.source=${{ github.repositoryUrl }}
 
-      - name: 'build and push manuelly'
+#      - name: 'build and push manuelly'
+#        run: |
+#          docker build -t ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest .
+#          docker tag ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
+#
+#          docker push ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest
+#          docker push ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
+#
+      - name: Build and Push Multi-Arch Image
         run: |
-          docker build -t ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest .
-          docker tag ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
+          docker buildx create --use
           
-          docker push ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest
-          docker push ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --tag ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest \
+            --tag ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }} \
+            --push .
