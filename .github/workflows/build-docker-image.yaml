@@ -15,23 +15,36 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'dev' }}
+
     steps:
       # Checkout le code de la branche
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Login to the Docker registry
+      # Connecter à Docker Hub
       - name: Login to technostrea Hub
         uses: docker/login-action@v3
         with:
           registry: ${{ env.DOCKERHUB_REGISTRY }}
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
+          logout: 'true'
+
+      # Générer dynamiquement les tags d’image
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: technostrea/recettes-de-catherine
+          tags: |
+            type=raw,value=dev-latest,enable={{is_default_branch == false}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=short,prefix=dev-,enable={{is_default_branch == false}}
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: technostrea/recettes-de-catherine:dev-latest, technostrea/recettes-de-catherine:dev-$GITHUB_SHA
+          tags: ${{ steps.meta.outputs.tags }}
