@@ -30,6 +30,22 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: 'true'
+          labels: |
+            org.opencontainers.image.title=Recettes de Catherine
+            org.opencontainers.image.description=Application de gestion des recettes
+            org.opencontainers.image.version=${{ github.run_number }}
+            org.opencontainers.image.created=${{ github.event.repository.updated_at }}
+            org.opencontainers.image.source=${{ github.repositoryUrl }}
+          tags: |
+            ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest
+            ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
+          
+
 #      # Générer dynamiquement les tags d’image
 #      - name: Extract metadata (tags, labels) for Docker
 #        id: meta
