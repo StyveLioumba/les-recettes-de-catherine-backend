@@ -30,18 +30,21 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
-      # Générer dynamiquement les tags d’image
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: technostrea/recettes-de-catherine
-          tags: |
-            type=raw,value=dev-latest,enable=${{ github.ref_name != 'main'}}
-            type=raw,value=latest,enable=${{ github.ref_name == 'main'}}
-            type=sha,format=short,prefix=dev-,enable=${{ github.ref_name != 'main'}}
+#      # Générer dynamiquement les tags d’image
+#      - name: Extract metadata (tags, labels) for Docker
+#        id: meta
+#        uses: docker/metadata-action@v5
+#        with:
+#          images: technostrea/recettes-de-catherine
+#          tags: |
+#            type=raw,value=dev-latest,enable=${{ github.ref_name != 'main'}}
+#            type=raw,value=latest,enable=${{ github.ref_name == 'main'}}
+#            type=sha,format=short,prefix=dev-,enable=${{ github.ref_name != 'main'}}
 
       - name: 'build and push manuelly'
         run: |
-          docker build -t technostrea/recettes-de-catherine:dev-latest .
-          docker push technostrea/recettes-de-catherine:dev-latest
+          docker build -t ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest .
+          docker tag ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
+          
+          docker push ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest
+          docker push ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
