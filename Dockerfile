@@ -9,6 +9,10 @@ RUN mvn clean package -Dmaven.test.skip=true
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar ./app.jar
+
+# Créer le dossier pour stocker les images
+RUN mkdir -p /app/pictures
+
 ARG SERVER_PORT=8080
 ENV SERVER_PORT=${SERVER_PORT}
 EXPOSE ${SERVER_PORT}

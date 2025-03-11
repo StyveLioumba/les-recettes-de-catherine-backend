@@ -1,0 +1,34 @@
+name: Build and Deploy image private registry
+
+on:
+  push:
+    branches:
+      - dev
+
+  workflow_dispatch: # Déclenchement manuel
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      # Checkout le code de la branche
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Login to the Docker registry
+      - name: Login to technostrea Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags:
+            - ${{ secrets.DOCKERHUB_REGISTRY }}/recettes-de-catherine:dev-latest
+            - ${{ secrets.DOCKERHUB_REGISTRY }}/recettes-de-catherine:dev-$GITHUB_SHA

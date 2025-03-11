@@ -36,3 +36,12 @@ build/
 
 ._*
 src/main/resources/pictures/*
+
+tools/data/grafana/*
+
+pictures/*
+!pictures/.gitkeep
+*.log
+
+logs/*
+!logs/.gitkeep

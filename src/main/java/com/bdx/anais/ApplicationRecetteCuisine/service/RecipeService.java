@@ -40,7 +40,7 @@ import java.util.UUID;
 @Service
 public class RecipeService {
 
-    private final Path rootLocation = Paths.get("src/main/resources/pictures");
+    private final Path rootLocation = Paths.get("pictures");
 
     private RecipeRepo recipeRepo;
 

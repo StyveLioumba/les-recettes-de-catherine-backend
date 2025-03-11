@@ -56,13 +56,13 @@ DELETE {{baseUrl}}/delete/78a6fd20-2949-4050-a5c1-f1b6eb02aef1
 
 # telecharger une images
 
-POST {{baseUrl}}/uploadRecipePictures/93506f5c-f4be-4ee5-a266-21e19d44f779
+POST {{baseUrl}}/uploadRecipePictures/959443ed-a045-43c6-b1d1-e82a1536376c
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="files" ; filename="SLI-Ing-DEVOPS.pdf"
+Content-Disposition: form-data; name="files" ; filename="carbonara.jpg"
 
-< /Users/styvelioumba/Downloads/SLI-Ing-DEVOPS.pdf
+< /Users/styvelioumba/Downloads/carbonara.jpg
 --WebAppBoundary--
 
 ###
