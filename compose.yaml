@@ -35,9 +35,8 @@ networks:
 
 services:
   app:
-    image: ${REGISTRY_URL}/technostrea/recettes-de-catherine:dev-latest
+    image: technostrea/poc-recettes-backend:stable-alpine
     container_name: recettes-backend
-    platform: linux/arm64
     <<:
       - *status
       - *env-file
@@ -59,4 +58,3 @@ services:
       - *networks
     volumes:
       - ./db/init-scripts:/docker-entrypoint-initdb.d
-      - db-data:/var/lib/postgresql/data
