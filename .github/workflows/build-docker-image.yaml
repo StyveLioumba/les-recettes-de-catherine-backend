@@ -41,9 +41,7 @@ jobs:
             type=raw,value=latest,enable=${{ github.ref_name == 'main'}}
             type=sha,format=short,prefix=dev-,enable=${{ github.ref_name != 'main'}}
 
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
+      - name: 'build and push manuelly'
+        run: |
+          docker build -t technostrea/recettes-de-catherine:dev-latest .
+          docker push technostrea/recettes-de-catherine:dev-latest
