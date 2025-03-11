@@ -43,8 +43,8 @@ jobs:
 
       - name: 'build and push manuelly'
         run: |
-          docker build -t ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest .
-          docker tag ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
+          docker build -t ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest .
+          docker tag ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
           
-          docker push ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest
-          docker push ${{ env.PRIVATE_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
+          docker push ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-latest
+          docker push ${{ env.DOCKERHUB_REGISTRY }}/technostrea/recettes-de-catherine:dev-${{ github.run_number }}
