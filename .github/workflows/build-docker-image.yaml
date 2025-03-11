@@ -29,7 +29,6 @@ jobs:
           registry: ${{ env.DOCKERHUB_REGISTRY }}
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PASSWORD }}
-          logout: 'true'
 
       # Générer dynamiquement les tags d’image
       - name: Extract metadata (tags, labels) for Docker
