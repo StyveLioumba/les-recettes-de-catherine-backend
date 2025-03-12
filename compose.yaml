@@ -43,7 +43,8 @@ services:
       - *networks
       - *labels
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: postgres:alpine3.18
     container_name: db
@@ -57,4 +58,4 @@ services:
       - *env-file
       - *networks
     volumes:
-      - ./db/init-scripts:/docker-entrypoint-initdb.d
+      - ./db/init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
